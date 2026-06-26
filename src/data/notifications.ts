@@ -1,0 +1,62 @@
+import type { NotificationItem } from '../types';
+import { palette } from '../theme';
+
+export const notifications: NotificationItem[] = [
+  {
+    id: 'n1',
+    group: { zh: '多伦多清华校友会', en: 'Tsinghua Alumni · Toronto' },
+    title: { zh: '周六校友烧烤聚会报名开始', en: 'Saturday alumni BBQ — RSVP open' },
+    body: { zh: 'High Park 11 号野餐区，下午 3 点，已 32 人报名。', en: 'High Park site #11, 3 PM. 32 alumni signed up.' },
+    time: { zh: '10分钟前', en: '10m ago' },
+    icon: 'megaphone-outline',
+    color: palette.maple,
+    unread: true,
+  },
+  {
+    id: 'n2',
+    group: { zh: '全体校友', en: 'All Alumni' },
+    title: { zh: '新投票：年会城市投票进行中', en: 'New poll: vote for the gala city' },
+    body: { zh: '已有 731 人投票，7月3日截止，快来参与！', en: '731 votes so far — ends Jul 3. Cast yours!' },
+    time: { zh: '1小时前', en: '1h ago' },
+    icon: 'bar-chart-outline',
+    color: palette.sky,
+    unread: true,
+  },
+  {
+    id: 'n3',
+    group: { zh: '职业辅导', en: 'Career Coaching' },
+    title: { zh: '直播即将开始：加拿大科技求职', en: 'Going live: Breaking into Canadian tech' },
+    body: { zh: '王浩然主讲，点击进入直播间。', en: 'Hosted by Haoran Wang. Tap to join.' },
+    time: { zh: '正在进行', en: 'Live now' },
+    icon: 'videocam-outline',
+    color: palette.jade,
+    unread: true,
+  },
+  {
+    id: 'n4',
+    group: { zh: '新移民互助群', en: 'Newcomer Support' },
+    title: { zh: '新文件：登陆第一个月清单', en: 'New file: First Month Checklist' },
+    body: { zh: '黄俊杰律师整理，含 SIN、医保、银行步骤。', en: 'By lawyer Junjie Huang — SIN, health, banking steps.' },
+    time: { zh: '3小时前', en: '3h ago' },
+    icon: 'document-attach-outline',
+    color: palette.amber,
+  },
+  {
+    id: 'n5',
+    group: { zh: '华人创业者俱乐部', en: 'Founders Club' },
+    title: { zh: 'Demo Day 仅剩 5 个名额', en: 'Demo Day — only 5 spots left' },
+    body: { zh: '下周三晚 6 点，线上路演，欢迎报名。', en: 'Next Wed 6 PM online pitch session.' },
+    time: { zh: '昨天', en: 'Yesterday' },
+    icon: 'rocket-outline',
+    color: palette.plum,
+  },
+  {
+    id: 'n6',
+    group: { zh: '系统', en: 'System' },
+    title: { zh: '林婉清 给你发了一条新消息', en: 'Wanqing Lin sent you a message' },
+    body: { zh: '报税的事我帮你看过了 👍', en: 'I looked over your tax question 👍' },
+    time: { zh: '昨天', en: 'Yesterday' },
+    icon: 'chatbubble-ellipses-outline',
+    color: palette.maple,
+  },
+];
