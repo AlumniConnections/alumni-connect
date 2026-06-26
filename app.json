@@ -7,10 +7,6 @@
     "icon": "./assets/icon.png",
     "scheme": "alumniconnect",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "backgroundColor": "#0E1A2B"
-    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.alumniconnect.app"
@@ -30,8 +26,7 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router",
-      "expo-image"
+      "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
