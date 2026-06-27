@@ -30,26 +30,58 @@ npm run android
 
 Scan the QR code with the **Expo Go** app on your phone, or run on a simulator.
 
+## Backend (auth + real-time messaging)
+
+The app now has a real backend in [`server/`](./server): **JWT authentication** and
+**real-time messaging over WebSockets**, backed by SQLite. Run it alongside the app:
+
+```bash
+cd server
+npm install
+npm run dev      # starts http://localhost:4000 (+ ws://localhost:4000/ws)
+```
+
+Then launch the app (`npm start`). The app **auto-detects** the server URL from the
+Expo packager host, so it works on a simulator *and* in Expo Go on a physical phone
+on the same Wi-Fi — no manual IP config. To point at a different server, set
+`EXPO_PUBLIC_API_URL` (e.g. `EXPO_PUBLIC_API_URL=http://192.168.1.20:4000 npm start`).
+
+**Sign in** with a demo account — email `me@alumni.app`, password `alumni123` (or tap
+"Fill demo credentials" on the login screen) — or register a brand-new account.
+
+What's wired to the backend:
+
+- **Auth gate** — the app redirects to a login/register screen until you're signed in; the JWT is stored securely with `expo-secure-store` and the session is restored on relaunch.
+- **Messaging** — the Messages tab and chat screens load conversations/history over REST and send/receive in **real time over WebSocket**, with optimistic send, **typing indicators**, **online presence**, live **unread counts**, and auto-reconnect.
+- **Direct chats** — the "Message" button on any alumni profile opens (or creates) a real 1:1 conversation on the server.
+
+Forums, the home feed, meetings, voting, and resources still use local mock data in `src/data/`.
+
 ## Project structure
 
 ```
 app/                 # expo-router screens (file-based routing)
+  login              # auth: sign in / sign up
   (tabs)/            # Home, Network, Forums, Messages, Profile
-  chat/[id]          # direct & group conversation
+  chat/[id]          # direct & group conversation (realtime)
   meeting/[id]       # voice/video call experience
   thread/[id]        # forum thread + replies
   alumni/[id]        # alumni profile detail
   resources/         # newcomer / career / startup hubs
   voting, notifications, meetings
 src/
+  api/               # REST client, WebSocket client, base-URL detection
+  store/             # AuthContext (session) + AppContext (lang, votes, realtime)
   theme/             # design system (maple-red palette)
   i18n/              # bilingual UI strings
-  store/             # app context (language, votes, live messages)
   data/              # mock alumni, chats, forums, polls, resources
   components/        # reusable UI + PollCard
   types/             # shared TypeScript types
+server/              # Node + Express + ws + SQLite backend (see server/README.md)
 ```
 
 ## Notes
 
-This is a fully navigable front-end prototype. All data is mocked in `src/data/` so the app runs with no backend. Interactions that persist for the session: casting poll votes, sending chat messages, posting forum replies, and switching language. The next step toward production would be wiring a backend (auth, real-time messaging via WebSocket, and a meetings SDK such as Agora/Twilio/LiveKit for actual voice/video).
+The next step toward production would be a managed Postgres database, push
+notifications, and a meetings SDK such as Agora / Twilio / LiveKit behind the
+existing voice/video call UI.

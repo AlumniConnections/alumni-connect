@@ -7,7 +7,6 @@ import { colors, radii, spacing, typography, shadow } from '../../src/theme';
 import { useApp } from '../../src/store/AppContext';
 import { Avatar, Button, NavHeader, Tag } from '../../src/components/ui';
 import { profileById } from '../../src/data/profiles';
-import { conversations } from '../../src/data/conversations';
 
 const openToMeta: Record<string, { key: any; color: string; soft: string; icon: string }> = {
   mentoring: { key: 'open_to_mentoring', color: colors.jade, soft: colors.jadeSoft, icon: 'ribbon' },
@@ -20,7 +19,7 @@ const openToMeta: Record<string, { key: any; color: string; soft: string; icon: 
 export default function AlumniDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
-  const { t, tx, lang } = useApp();
+  const { t, tx, lang, openDirectChat: openDirect } = useApp();
   const u = profileById(id);
 
   if (!u) {
@@ -32,10 +31,9 @@ export default function AlumniDetail() {
     );
   }
 
-  const openDirectChat = () => {
-    const existing = conversations.find((c) => c.kind === 'direct' && c.participantIds.includes(u.id));
-    if (existing) router.push(`/chat/${existing.id}`);
-    else router.push(`/chat/${conversations[1].id}`);
+  const openDirectChat = async () => {
+    const conversationId = await openDirect(u.id);
+    if (conversationId) router.push(`/chat/${conversationId}`);
   };
 
   const infoRows: { icon: any; label: string; value: string }[] = [

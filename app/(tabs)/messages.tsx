@@ -6,11 +6,10 @@ import { router } from 'expo-router';
 import { colors, radii, spacing, typography } from '../../src/theme';
 import { useApp } from '../../src/store/AppContext';
 import { Avatar, IconButton } from '../../src/components/ui';
-import { conversations } from '../../src/data/conversations';
-import type { Conversation } from '../../src/types';
+import type { ApiConversation } from '../../src/api/types';
 
 export default function MessagesScreen() {
-  const { t, tx } = useApp();
+  const { t, tx, conversations, connected } = useApp();
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
 
@@ -21,13 +20,16 @@ export default function MessagesScreen() {
       return (c.title.zh + c.title.en + c.lastMessage.zh + c.lastMessage.en).toLowerCase().includes(q);
     });
     return [...list].sort((a, b) => Number(!!b.pinned) - Number(!!a.pinned));
-  }, [query]);
+  }, [query, conversations]);
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }}>
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <View style={styles.headerRow}>
-          <Text style={styles.title}>{t('messages_title')}</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+            <Text style={styles.title}>{t('messages_title')}</Text>
+            <View style={[styles.statusDot, { backgroundColor: connected ? colors.success : colors.amber }]} />
+          </View>
           <IconButton icon="create-outline" bg="rgba(255,255,255,0.16)" color="#fff" />
         </View>
         <View style={styles.searchBar}>
@@ -49,12 +51,24 @@ export default function MessagesScreen() {
         showsVerticalScrollIndicator={false}
         renderItem={({ item }) => <ConversationRow conversation={item} />}
         ItemSeparatorComponent={() => <View style={styles.sep} />}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <Ionicons
+              name={connected ? 'chatbubbles-outline' : 'cloud-offline-outline'}
+              size={40}
+              color={colors.textHint}
+            />
+            <Text style={styles.emptyText}>
+              {connected ? t('new_message') : t('status_connecting')}
+            </Text>
+          </View>
+        }
       />
     </View>
   );
 }
 
-function ConversationRow({ conversation }: { conversation: Conversation }) {
+function ConversationRow({ conversation }: { conversation: ApiConversation }) {
   const { tx, t } = useApp();
   return (
     <Pressable
@@ -107,6 +121,7 @@ const styles = StyleSheet.create({
   },
   headerRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   title: { ...typography.title, color: '#fff' },
+  statusDot: { width: 8, height: 8, borderRadius: 4 },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -149,4 +164,6 @@ const styles = StyleSheet.create({
   },
   unreadText: { color: '#fff', fontSize: 11, fontWeight: '700' },
   sep: { height: 1, backgroundColor: colors.divider, marginLeft: 80 },
+  empty: { alignItems: 'center', paddingTop: spacing.xxxl, gap: spacing.md },
+  emptyText: { ...typography.body, color: colors.textMuted },
 });

@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { colors, radii, spacing, typography, shadow } from '../../src/theme';
 import { useApp } from '../../src/store/AppContext';
+import { useAuth } from '../../src/store/AuthContext';
 import { Avatar, Card, IconButton, SectionHeader, Tag, Button } from '../../src/components/ui';
 import { PollCard } from '../../src/components/PollCard';
 import { feed } from '../../src/data/feed';
@@ -31,7 +32,9 @@ function greetingKey() {
 
 export default function HomeScreen() {
   const { t, tx, lang, toggleLang } = useApp();
+  const { user } = useAuth();
   const insets = useSafeAreaInsets();
+  const me = user ?? currentUser;
   const unreadCount = notifications.filter((n) => n.unread).length;
   const liveMeeting = meetings.find((m) => m.live);
 
@@ -41,7 +44,7 @@ export default function HomeScreen() {
         <View style={styles.headerRow}>
           <View style={{ flex: 1 }}>
             <Text style={styles.greeting}>{t(greetingKey())}</Text>
-            <Text style={styles.headerName}>{tx(currentUser.name)}</Text>
+            <Text style={styles.headerName}>{tx(me.name)}</Text>
           </View>
           <Pressable onPress={toggleLang} style={styles.langToggle}>
             <Ionicons name="language" size={15} color="#fff" />
@@ -57,7 +60,7 @@ export default function HomeScreen() {
           />
           <View style={{ width: 10 }} />
           <Pressable onPress={() => router.push('/(tabs)/profile')}>
-            <Avatar initials={currentUser.initials} color={colors.gold} size={40} />
+            <Avatar initials={me.initials} color={colors.gold} size={40} />
           </Pressable>
         </View>
       </View>

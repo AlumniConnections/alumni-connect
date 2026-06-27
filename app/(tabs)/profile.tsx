@@ -5,13 +5,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { colors, radii, spacing, typography, shadow } from '../../src/theme';
 import { useApp } from '../../src/store/AppContext';
+import { useAuth } from '../../src/store/AuthContext';
 import { Avatar, Tag } from '../../src/components/ui';
 import { currentUser } from '../../src/data/profiles';
 
 export default function ProfileScreen() {
   const { t, tx, lang, toggleLang } = useApp();
+  const { user, signOut } = useAuth();
   const insets = useSafeAreaInsets();
-  const u = currentUser;
+  const u = user ?? currentUser;
+  const openTo = (u.openTo ?? []) as string[];
 
   const infoRows: { icon: any; label: string; value: string }[] = [
     { icon: 'school-outline', label: t('profile_university'), value: tx(u.university) },
@@ -49,10 +52,10 @@ export default function ProfileScreen() {
             <Text style={styles.name}>{tx(u.name)}</Text>
             {u.headline && <Text style={styles.headline}>{tx(u.headline)}</Text>}
             <View style={styles.openToRow}>
-              {u.openTo?.includes('mentoring') && (
+              {openTo.includes('mentoring') && (
                 <Tag label={t('open_to_mentoring')} color="#fff" soft="rgba(255,255,255,0.18)" icon="ribbon" />
               )}
-              {u.openTo?.includes('newcomer-help') && (
+              {openTo.includes('newcomer-help') && (
                 <Tag label={t('open_to_newcomer')} color="#fff" soft="rgba(255,255,255,0.18)" icon="heart" />
               )}
             </View>
@@ -105,7 +108,7 @@ export default function ProfileScreen() {
             ))}
           </View>
 
-          <Pressable style={styles.signOut}>
+          <Pressable style={styles.signOut} onPress={signOut}>
             <Text style={styles.signOutText}>{t('sign_out')}</Text>
           </Pressable>
         </View>

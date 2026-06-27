@@ -141,6 +141,35 @@ export const strings = {
   now: { zh: '刚刚', en: 'now' },
   members: { zh: '成员', en: 'Members' },
   view_profile: { zh: '查看资料', en: 'View profile' },
+
+  // Auth
+  auth_welcome: { zh: '欢迎回来', en: 'Welcome back' },
+  auth_welcome_new: { zh: '加入校友社区', en: 'Join the community' },
+  auth_subtitle: { zh: '加拿大华人校友的专属社区', en: 'The home for Chinese alumni in Canada' },
+  auth_login: { zh: '登录', en: 'Sign in' },
+  auth_register: { zh: '注册', en: 'Sign up' },
+  auth_email: { zh: '邮箱', en: 'Email' },
+  auth_password: { zh: '密码', en: 'Password' },
+  auth_name: { zh: '姓名', en: 'Full name' },
+  auth_have_account: { zh: '已有账号？登录', en: 'Have an account? Sign in' },
+  auth_no_account: { zh: '没有账号？注册', en: 'New here? Create an account' },
+  auth_optional_section: { zh: '校友资料（选填）', en: 'Alumni details (optional)' },
+  auth_university: { zh: '毕业院校', en: 'University' },
+  auth_major: { zh: '专业', en: 'Major' },
+  auth_gradYear: { zh: '毕业年份', en: 'Graduation year' },
+  auth_city: { zh: '现居城市', en: 'City' },
+  auth_occupation: { zh: '职业', en: 'Occupation' },
+  auth_signing_in: { zh: '正在登录…', en: 'Signing in…' },
+  auth_creating: { zh: '正在创建账号…', en: 'Creating account…' },
+  auth_demo_hint: { zh: '体验演示账号', en: 'Use a demo account' },
+  auth_demo_fill: { zh: '一键填入演示账号', en: 'Fill demo credentials' },
+  auth_required: { zh: '请填写邮箱和密码', en: 'Email and password are required' },
+
+  // Connection status
+  status_connected: { zh: '已连接', en: 'Connected' },
+  status_connecting: { zh: '连接中…', en: 'Connecting…' },
+  status_offline: { zh: '离线 · 重连中', en: 'Offline · reconnecting' },
+  typing_indicator: { zh: '正在输入…', en: 'typing…' },
 } as const;
 
 export type StringKey = keyof typeof strings;

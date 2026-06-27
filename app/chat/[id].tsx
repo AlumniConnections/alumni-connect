@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -15,34 +15,63 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { colors, radii, spacing, typography } from '../../src/theme';
 import { useApp } from '../../src/store/AppContext';
 import { Avatar } from '../../src/components/ui';
-import { conversationById } from '../../src/data/conversations';
 import { profileById } from '../../src/data/profiles';
 import type { Message } from '../../src/types';
 
 export default function ChatScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
-  const { t, tx, messages, sendMessage } = useApp();
+  const {
+    t,
+    tx,
+    messages,
+    sendMessage,
+    sendTyping,
+    markRead,
+    loadMessages,
+    conversationById,
+    currentUserId,
+    typingByConversation,
+    onlineUserIds,
+  } = useApp();
   const [draft, setDraft] = useState('');
   const listRef = useRef<FlatList<Message>>(null);
 
   const conversation = conversationById(id);
   const thread = messages[id] ?? [];
 
+  // Load history and mark the conversation as read on open.
+  useEffect(() => {
+    loadMessages(id);
+    markRead(id);
+  }, [id, loadMessages, markRead]);
+
   if (!conversation) {
     return <View style={{ flex: 1, backgroundColor: colors.bg }} />;
   }
 
   const isGroup = conversation.kind === 'group';
-  const subtitle = isGroup
-    ? `${conversation.participantIds.length} ${t('members_count')}`
-    : t('online');
+  const otherId = conversation.participantIds.find((p) => p !== currentUserId);
+  const someoneTyping = typingByConversation[id];
+  const otherOnline = otherId ? onlineUserIds.has(otherId) : false;
+  const subtitle = someoneTyping
+    ? t('typing_indicator')
+    : isGroup
+      ? `${conversation.participantIds.length} ${t('members_count')}`
+      : otherOnline
+        ? t('online')
+        : t('status_offline');
 
   const handleSend = () => {
     if (!draft.trim()) return;
     sendMessage(id, draft);
     setDraft('');
     setTimeout(() => listRef.current?.scrollToEnd({ animated: true }), 60);
+  };
+
+  const handleChangeText = (text: string) => {
+    setDraft(text);
+    if (text.trim()) sendTyping(id);
   };
 
   return (
@@ -54,7 +83,14 @@ export default function ChatScreen() {
         <Avatar initials={conversation.initials} color={conversation.avatarColor} size={38} />
         <View style={{ flex: 1, marginLeft: spacing.sm }}>
           <Text style={styles.headerTitle} numberOfLines={1}>{tx(conversation.title)}</Text>
-          <Text style={styles.headerSub}>{subtitle}</Text>
+          <Text
+            style={[
+              styles.headerSub,
+              { color: someoneTyping || otherOnline || isGroup ? colors.success : colors.textMuted },
+            ]}
+          >
+            {subtitle}
+          </Text>
         </View>
         <Pressable style={styles.callBtn} onPress={() => router.push(`/meeting/voice-${conversation.id}`)}>
           <Ionicons name="call" size={20} color={colors.primary} />
@@ -85,7 +121,7 @@ export default function ChatScreen() {
           </Pressable>
           <TextInput
             value={draft}
-            onChangeText={setDraft}
+            onChangeText={handleChangeText}
             placeholder={t('type_message')}
             placeholderTextColor={colors.textHint}
             style={styles.input}
@@ -106,8 +142,8 @@ export default function ChatScreen() {
 }
 
 function Bubble({ message, isGroup }: { message: Message; isGroup: boolean }) {
-  const { tx } = useApp();
-  const mine = message.senderId === 'me';
+  const { tx, currentUserId } = useApp();
+  const mine = message.senderId === currentUserId;
   const sender = profileById(message.senderId);
 
   if (message.system) {
