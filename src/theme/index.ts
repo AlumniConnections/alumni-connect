@@ -1,5 +1,5 @@
 /**
- * Central design system for AlumniConnect.
+ * Central design system for AlumniHub.
  * The maple-red primary intentionally bridges Chinese red and the Canadian maple leaf.
  */
 

@@ -27,7 +27,7 @@ const server = http.createServer(app);
 attachWebSocketServer(server);
 
 server.listen(config.port, () => {
-  console.log(`\n  AlumniConnect server listening on http://localhost:${config.port}`);
+  console.log(`\n  AlumniHub server listening on http://localhost:${config.port}`);
   console.log(`  WebSocket endpoint: ws://localhost:${config.port}/ws`);
   console.log(`  Demo logins: me@alumni.app … p12@alumni.app  (password: ${config.demoPassword})\n`);
 });

@@ -2,7 +2,7 @@
   "name": "alumni-connect-server",
   "version": "1.0.0",
   "private": true,
-  "description": "Backend for AlumniConnect: JWT auth + realtime WebSocket messaging.",
+  "description": "Backend for AlumniHub: JWT auth + realtime WebSocket messaging.",
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",

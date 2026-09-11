@@ -1,7 +1,7 @@
 import type { Lang } from '../types';
 
 export const strings = {
-  appName: { zh: '校友连线', en: 'AlumniConnect' },
+  appName: { zh: '校友汇', en: 'AlumniHub' },
   tagline: { zh: '加拿大华人校友社区', en: 'Chinese Alumni in Canada' },
 
   // Tabs

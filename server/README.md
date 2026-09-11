@@ -1,6 +1,6 @@
-# AlumniConnect Server
+# AlumniHub Server
 
-Backend for the AlumniConnect app: **JWT authentication** + **real-time messaging over WebSockets**, backed by SQLite.
+Backend for the AlumniHub app: **JWT authentication** + **real-time messaging over WebSockets**, backed by SQLite.
 
 ## Stack
 

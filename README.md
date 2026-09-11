@@ -1,4 +1,4 @@
-# 校友连线 · AlumniConnect
+# 校友汇 · AlumniHub
 
 A mobile social networking app for **Chinese alumni of Chinese universities who have immigrated to Canada**. Built with **Expo (React Native) + TypeScript + expo-router**. Fully **bilingual (中文 / English)** — tap the language toggle in the top-right of the Home or Profile screen to switch instantly.
 
